@@ -38,6 +38,9 @@ public class Client implements Serializable {
 	@CollectionTable(name = "PHONE")
 	private Set<String> phones = new HashSet<String>();
 
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<Order>();
+
 	public Client() {
 
 	}
@@ -107,6 +110,14 @@ public class Client implements Serializable {
 		this.phones = phones;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -123,6 +134,5 @@ public class Client implements Serializable {
 		Client other = (Client) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 }

@@ -1,5 +1,6 @@
 package com.dsan.springrestapicourse;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,20 @@ import com.dsan.springrestapicourse.domain.Address;
 import com.dsan.springrestapicourse.domain.Category;
 import com.dsan.springrestapicourse.domain.City;
 import com.dsan.springrestapicourse.domain.Client;
+import com.dsan.springrestapicourse.domain.Order;
+import com.dsan.springrestapicourse.domain.Payment;
+import com.dsan.springrestapicourse.domain.PaymentWithCard;
+import com.dsan.springrestapicourse.domain.PaymentWithTicket;
 import com.dsan.springrestapicourse.domain.Product;
 import com.dsan.springrestapicourse.domain.State;
 import com.dsan.springrestapicourse.domain.enums.ClientType;
+import com.dsan.springrestapicourse.domain.enums.PaymentStatus;
 import com.dsan.springrestapicourse.repositories.AddressRepository;
 import com.dsan.springrestapicourse.repositories.CategoryRepository;
 import com.dsan.springrestapicourse.repositories.CityRepository;
 import com.dsan.springrestapicourse.repositories.ClientRepository;
+import com.dsan.springrestapicourse.repositories.OrderRepository;
+import com.dsan.springrestapicourse.repositories.PaymentRepository;
 import com.dsan.springrestapicourse.repositories.ProductRepository;
 import com.dsan.springrestapicourse.repositories.StateRepository;
 
@@ -41,6 +49,12 @@ public class SpringRestApiCourseApplication implements CommandLineRunner {
 
 	@Autowired
 	private AddressRepository addressRepository;
+
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Autowired
+	private PaymentRepository paymentRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringRestApiCourseApplication.class, args);
@@ -95,10 +109,27 @@ public class SpringRestApiCourseApplication implements CommandLineRunner {
 		Address adr2 = new Address(null, "Avenida Matos", "105", "Sala 80", "Centro", "55646354", cli1, c2);
 
 		cli1.getAddresses().addAll(Arrays.asList(adr1, adr2));
-		
+
 		clientRepository.saveAll(Arrays.asList(cli1));
 		addressRepository.saveAll(Arrays.asList(adr1, adr2));
-		
+
+		// payments, orders, address...
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+
+		Order ped1 = new Order(null, sdf.parse("30/09/2017 10:32"), cli1, adr1);
+		Order ped2 = new Order(null, sdf.parse("10/10/2017 19:35"), cli1, adr2);
+
+		Payment pagto1 = new PaymentWithCard(null, PaymentStatus.PAID_OF, ped1, 6);
+		ped1.setPayment(pagto1);
+
+		Payment pagto2 = new PaymentWithTicket(null, PaymentStatus.PENDING, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPayment(pagto2);
+
+		cli1.getOrders().addAll(Arrays.asList(ped1, ped2));
+
+		orderRepository.saveAll(Arrays.asList(ped1, ped2));
+		paymentRepository.saveAll(Arrays.asList(pagto1, pagto2));
 
 	}
 
