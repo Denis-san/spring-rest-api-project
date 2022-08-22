@@ -120,7 +120,7 @@ public class SpringRestApiCourseApplication implements CommandLineRunner {
 
 		// payments, orders, address...
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 		Order ped1 = new Order(null, sdf.parse("30/09/2017 10:32"), cli1, adr1);
 		Order ped2 = new Order(null, sdf.parse("10/10/2017 19:35"), cli1, adr2);
