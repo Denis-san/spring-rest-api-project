@@ -13,6 +13,7 @@ import com.dsan.springrestapicourse.domain.Category;
 import com.dsan.springrestapicourse.domain.City;
 import com.dsan.springrestapicourse.domain.Client;
 import com.dsan.springrestapicourse.domain.Order;
+import com.dsan.springrestapicourse.domain.OrderItem;
 import com.dsan.springrestapicourse.domain.Payment;
 import com.dsan.springrestapicourse.domain.PaymentWithCard;
 import com.dsan.springrestapicourse.domain.PaymentWithTicket;
@@ -24,6 +25,7 @@ import com.dsan.springrestapicourse.repositories.AddressRepository;
 import com.dsan.springrestapicourse.repositories.CategoryRepository;
 import com.dsan.springrestapicourse.repositories.CityRepository;
 import com.dsan.springrestapicourse.repositories.ClientRepository;
+import com.dsan.springrestapicourse.repositories.OrderItemRepository;
 import com.dsan.springrestapicourse.repositories.OrderRepository;
 import com.dsan.springrestapicourse.repositories.PaymentRepository;
 import com.dsan.springrestapicourse.repositories.ProductRepository;
@@ -55,6 +57,9 @@ public class SpringRestApiCourseApplication implements CommandLineRunner {
 
 	@Autowired
 	private PaymentRepository paymentRepository;
+
+	@Autowired
+	private OrderItemRepository itemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringRestApiCourseApplication.class, args);
@@ -130,6 +135,21 @@ public class SpringRestApiCourseApplication implements CommandLineRunner {
 
 		orderRepository.saveAll(Arrays.asList(ped1, ped2));
 		paymentRepository.saveAll(Arrays.asList(pagto1, pagto2));
+
+		// orderItems, items, products ...
+
+		OrderItem ordIt = new OrderItem(ped1, p1, 0.00, 1, 2000.00);
+		OrderItem ordIt2 = new OrderItem(ped1, p3, 0.00, 2, 80.00);
+		OrderItem ordIt3 = new OrderItem(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItems().addAll(Arrays.asList(ordIt, ordIt2));
+		ped2.getItems().addAll(Arrays.asList(ordIt3));
+
+		p1.getItems().addAll(Arrays.asList(ordIt));
+		p2.getItems().addAll(Arrays.asList(ordIt3));
+		p3.getItems().addAll(Arrays.asList(ordIt2));
+
+		itemRepository.saveAll(Arrays.asList(ordIt, ordIt2, ordIt3));
 
 	}
 
