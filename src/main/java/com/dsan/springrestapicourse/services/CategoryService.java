@@ -10,4 +10,6 @@ public interface CategoryService {
 
 	public Category update(Category category);
 
+	public void delete(Integer id);
+
 }
