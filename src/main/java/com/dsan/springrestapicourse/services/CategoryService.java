@@ -1,5 +1,7 @@
 package com.dsan.springrestapicourse.services;
 
+import java.util.List;
+
 import com.dsan.springrestapicourse.domain.Category;
 
 public interface CategoryService {
@@ -11,5 +13,7 @@ public interface CategoryService {
 	public Category update(Category category);
 
 	public void delete(Integer id);
+
+	public List<Category> findAll();
 
 }

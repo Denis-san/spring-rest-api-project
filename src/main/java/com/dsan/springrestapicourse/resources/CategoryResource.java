@@ -1,6 +1,8 @@
 package com.dsan.springrestapicourse.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dsan.springrestapicourse.domain.Category;
+import com.dsan.springrestapicourse.dto.CategoryDTO;
 import com.dsan.springrestapicourse.services.CategoryService;
 
 @RestController
@@ -34,14 +37,14 @@ public class CategoryResource {
 	public ResponseEntity<Void> insert(@RequestBody Category category) {
 		category = categoryService.insert(category);
 
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(category.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId())
+				.toUri();
 
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> update(@RequestBody Category category, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@RequestBody Category category, @PathVariable Integer id) {
 		category.setId(id);
 		category = categoryService.update(category);
 		return ResponseEntity.noContent().build();
@@ -52,5 +55,12 @@ public class CategoryResource {
 		categoryService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
+	@GetMapping()
+	public ResponseEntity<List<CategoryDTO>> findAll() {
+		List<Category> listCategory = categoryService.findAll();
+		List<CategoryDTO> listDTO = listCategory.stream().map(e -> new CategoryDTO(e)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
+
 }
