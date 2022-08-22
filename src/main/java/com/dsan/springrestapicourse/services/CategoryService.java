@@ -2,6 +2,8 @@ package com.dsan.springrestapicourse.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.dsan.springrestapicourse.domain.Category;
 
 public interface CategoryService {
@@ -16,4 +18,6 @@ public interface CategoryService {
 
 	public List<Category> findAll();
 
+	public Page<Category> findPage(Integer page, Integer linesPerPages, String orderBy, String direction);
+	
 }
