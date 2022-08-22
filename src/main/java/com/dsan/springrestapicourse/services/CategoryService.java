@@ -8,4 +8,6 @@ public interface CategoryService {
 
 	public Category insert(Category category);
 
+	public Category update(Category category);
+
 }
