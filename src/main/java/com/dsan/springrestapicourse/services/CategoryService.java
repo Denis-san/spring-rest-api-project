@@ -6,4 +6,6 @@ public interface CategoryService {
 
 	public Category findById(Integer id);
 
+	public Category insert(Category category);
+
 }
