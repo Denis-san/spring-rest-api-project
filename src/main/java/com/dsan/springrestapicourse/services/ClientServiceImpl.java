@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.dsan.springrestapicourse.domain.Client;
+import com.dsan.springrestapicourse.repositories.AddressRepository;
 import com.dsan.springrestapicourse.repositories.ClientRepository;
 import com.dsan.springrestapicourse.services.exceptions.DataIntegrityException;
 import com.dsan.springrestapicourse.services.exceptions.ObjectNotFoundException;
@@ -21,12 +22,23 @@ public class ClientServiceImpl implements ClientService {
 	@Autowired
 	private ClientRepository clientRepository;
 
+	@Autowired
+	private AddressRepository addressRepository;
+
 	@Override
 	public Client findById(Integer id) {
 		Optional<Client> optClient = clientRepository.findById(id);
 		return optClient.orElseThrow(
 				() -> new ObjectNotFoundException("Object not found! id: " + id + ", Type: " + Client.class.getName()));
 
+	}
+
+	@Override
+	public Client insert(Client client) {
+		client.setId(null);
+		client = clientRepository.save(client);
+		addressRepository.saveAll(client.getAddresses());
+		return client;
 	}
 
 	@Override

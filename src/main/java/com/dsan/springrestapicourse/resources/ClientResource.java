@@ -1,5 +1,6 @@
 package com.dsan.springrestapicourse.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,14 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dsan.springrestapicourse.domain.Client;
 import com.dsan.springrestapicourse.dto.ClientDTO;
+import com.dsan.springrestapicourse.dto.NewClientDTO;
 import com.dsan.springrestapicourse.services.ClientService;
 import com.dsan.springrestapicourse.services.exceptions.ObjectNotFoundException;
 
@@ -34,7 +38,15 @@ public class ClientResource {
 		Client tempClient = clientService.findById(id);
 		return ResponseEntity.ok().body(tempClient);
 	}
-	
+
+	@PostMapping
+	public ResponseEntity<Void> insert(@Valid @RequestBody NewClientDTO newClientDto) {
+		Client client = clientService.insert(newClientDto.toClient());
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId()).toUri();
+
+		return ResponseEntity.created(uri).build();
+	}
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody ClientDTO clientDto, @PathVariable Integer id) {
 		Client client = clientDto.toClient();
@@ -65,6 +77,5 @@ public class ClientResource {
 		Page<ClientDTO> listDTO = listClient.map(e -> new ClientDTO(e));
 		return ResponseEntity.ok().body(listDTO);
 	}
-
 
 }

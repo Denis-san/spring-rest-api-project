@@ -17,5 +17,7 @@ public interface ClientService {
 	public List<Client> findAll();
 
 	public Page<Client> findPage(Integer page, Integer linesPerPages, String orderBy, String direction);
+
+	public Client insert(Client client);
 	
 }
