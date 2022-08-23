@@ -62,5 +62,4 @@ public class CategoryServiceImpl implements CategoryService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPages, Direction.valueOf(direction), orderBy);
 		return categoryRepository.findAll(pageRequest);
 	}
-
 }

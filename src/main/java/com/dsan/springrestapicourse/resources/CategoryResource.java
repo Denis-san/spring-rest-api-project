@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -36,17 +38,17 @@ public class CategoryResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> insert(@RequestBody Category category) {
-		category = categoryService.insert(category);
-
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId())
-				.toUri();
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDTO categoryDto) {
+		Category category = categoryService.insert(categoryDto.toCategory());
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
+				buildAndExpand(category.getId()).toUri();
 
 		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> update(@RequestBody Category category, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoryDTO categoryDto, @PathVariable Integer id) {
+		Category category = categoryDto.toCategory();
 		category.setId(id);
 		category = categoryService.update(category);
 		return ResponseEntity.noContent().build();
@@ -66,11 +68,10 @@ public class CategoryResource {
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<Page<CategoryDTO>> findPage(
-			@RequestParam(name = "page", defaultValue = "0") Integer page, 
-			@RequestParam(name = "linesPerPage", defaultValue = "24")Integer linesPerPages, 
-			@RequestParam(name = "orderBy", defaultValue = "name")String orderBy,
-			@RequestParam(name = "direction", defaultValue = "ASC")String direction) {
+	public ResponseEntity<Page<CategoryDTO>> findPage(@RequestParam(name = "page", defaultValue = "0") Integer page,
+			@RequestParam(name = "linesPerPage", defaultValue = "24") Integer linesPerPages,
+			@RequestParam(name = "orderBy", defaultValue = "name") String orderBy,
+			@RequestParam(name = "direction", defaultValue = "ASC") String direction) {
 		Page<Category> listCategory = categoryService.findPage(page, linesPerPages, orderBy, direction);
 		Page<CategoryDTO> listDTO = listCategory.map(e -> new CategoryDTO(e));
 		return ResponseEntity.ok().body(listDTO);
