@@ -2,25 +2,47 @@ package com.dsan.springrestapicourse.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.dsan.springrestapicourse.domain.Address;
 import com.dsan.springrestapicourse.domain.City;
 import com.dsan.springrestapicourse.domain.Client;
 import com.dsan.springrestapicourse.domain.enums.ClientType;
+import com.dsan.springrestapicourse.services.validation.ClientInsert;
 
+@ClientInsert
 public class NewClientDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@NotEmpty
+	@Length(min = 5, max = 120)
 	private String name;
+	
+	@NotEmpty
+	@Email
 	private String email;
+	
+	@NotEmpty
 	private String cpfOrCnpj;
+	
 	private Integer clientType;
 
+	@NotEmpty
 	private String publicPlace;
+	
+	@NotEmpty
 	private String number;
+	
 	private String complement;
 	private String district;
+	
+	@NotEmpty
 	private String zipCode;
 
+	@NotEmpty
 	private String phone1;
 	private String phone2;
 
