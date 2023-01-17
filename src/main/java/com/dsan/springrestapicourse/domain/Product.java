@@ -116,4 +116,10 @@ public class Product implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", categories=" + categories.get(0) + "]";
+	}
+	
+	
 }

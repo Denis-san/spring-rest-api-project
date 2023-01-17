@@ -24,6 +24,9 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category findById(Integer id) {
 		Optional<Category> optCategory = categoryRepository.findById(id);
+		
+		optCategory.get().getProducts().stream().forEach(e -> System.out.println(e));
+		
 		return optCategory.orElseThrow(() -> new ObjectNotFoundException(
 				"Object not found! id: " + id + ", Type: " + Category.class.getName()));
 
