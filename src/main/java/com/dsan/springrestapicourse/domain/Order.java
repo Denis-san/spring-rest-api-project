@@ -27,7 +27,7 @@ public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instant;
 
@@ -41,7 +41,7 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "delivery_id")
 	private Address deliveryAddress;
-	
+
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<OrderItem>();
 
@@ -55,6 +55,16 @@ public class Order implements Serializable {
 		this.instant = instant;
 		this.client = client;
 		this.deliveryAddress = deliveryAddress;
+	}
+
+	public double getTotalValue() {
+		double sum = 0.0;
+
+		for (OrderItem orderItem : items) {
+			sum = sum + orderItem.getSubTotal();
+		}
+
+		return sum;
 	}
 
 	public Integer getId() {
