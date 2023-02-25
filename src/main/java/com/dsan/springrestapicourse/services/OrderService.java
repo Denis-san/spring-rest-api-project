@@ -6,4 +6,6 @@ public interface OrderService {
 
 	public Order findById(Integer id);
 
+	public Order insert(Order order);
+
 }
